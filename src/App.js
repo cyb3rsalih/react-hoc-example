@@ -1,25 +1,44 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import axios from 'axios'
+import Posts from './components/Posts'
+import Users from './components/Users'
+
 import './App.css';
 
 class App extends Component {
+
+  state = {
+    posts: [],
+    users: [],
+  }
+
+  componentDidMount(){
+    axios.get('https://jsonplaceholder.typicode.com/posts')
+    .then(posts => posts.data)
+    .then(posts => {
+      setTimeout( () => {
+        this.setState({
+          posts,
+        })
+      }, 2000)
+    })
+
+    axios.get('https://jsonplaceholder.typicode.com/users')
+    .then(users => users.data)
+    .then(users => {
+      setTimeout( () => {
+        this.setState({
+          users,
+        })
+      }, 500)
+    })
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Users {...this.state} />
+        <Posts {...this.state} />
       </div>
     );
   }
